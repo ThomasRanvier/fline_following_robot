@@ -1,0 +1,20 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.BBIOServer/
+.Xauthority
+.aptitude/
+.bash_history
+.bashrc
+.c9/
+.config/
+.dbus/
+.idea/
+.lesshst
+.local/
+.node-gyp/
+.profile
+.vim/
+.viminfo

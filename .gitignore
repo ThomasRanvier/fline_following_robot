@@ -18,3 +18,4 @@ gen
 .profile
 .vim/
 .viminfo
+.env

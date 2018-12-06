@@ -18,8 +18,8 @@ class PI_controller:
             return self.__boundaries[0]
         return value
 
-    def set_limits(limits):
+    def set_limits(self, limits):
         self.__boundaries = limits
 
-    def set_point(point):
+    def set_point(self, point):
         self.__point = point

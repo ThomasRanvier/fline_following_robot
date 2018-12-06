@@ -6,20 +6,20 @@ class PI_controller:
         self.__i_sum = 0.0
         self.__gain = gain
         self.__time_delta = time_delta
-        self.__boundaries = None
+        self.__limits = None
 
     def update(self, output):
         step_error = self.__point - (output * self.__gain)
         self.__i_sum += step_error * self.__time_delta
         value = self.__kp * step_error + self.__ki * self.__i_sum
-        if self.__boundaries != None and value > self.__boundaries[1]:
-            return self.__boundaries[1]
-        if self.__boundaries != None and value < self.__boundaries[0]:
-            return self.__boundaries[0]
+        if self.__limits != None and value > self.__limits[1]:
+            return self.__limits[1]
+        if self.__limits != None and value < self.__limits[0]:
+            return self.__limits[0]
         return value
 
     def set_limits(self, limits):
-        self.__boundaries = limits
+        self.__limits = limits
 
     def set_point(self, point):
         self.__point = point

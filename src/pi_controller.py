@@ -11,6 +11,10 @@ class PI_controller:
     def update(self, output):
         step_error = self.__point - (output * self.__gain)
         self.__i_sum += step_error * self.__time_delta
+        if self.__i_sum > self.__limits[1]:
+            self.__i_sum = self.__limits[1]
+        if self.__i_sum < -self.__limits[1]:
+            self.__i_sum = -self.__limits[1]
         value = self.__kp * step_error + self.__ki * self.__i_sum
         if self.__limits != None and value > self.__limits[1]:
             return self.__limits[1]

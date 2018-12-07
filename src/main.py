@@ -1,6 +1,6 @@
 import bbio as io
 from pi_controller import PI_controller
-from encoder import Encoder 
+from encoder import Encoder
 
 MOTOR_1 = io.PWM2B
 ENCODER_1 = (io.GPIO2_8, io.GPIO2_9)
@@ -20,6 +20,7 @@ if __name__ == '__main__':
     while True:
         encoder_output = encoder.get_output(PAUSE_S)
         pi_value = pid.update(encoder_output)
+        print "(", encoder_output, ", ", (encoder_output * PI_GAIN), ", ", pi_value, ")"
         io.analogWrite(MOTOR_1, pi_value)
         io.delay(PAUSE_MS)
 

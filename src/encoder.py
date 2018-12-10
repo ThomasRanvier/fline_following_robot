@@ -1,4 +1,3 @@
-import bbio as io
 from bbio.libraries.RotaryEncoder import RotaryEncoder
 
 class Encoder:

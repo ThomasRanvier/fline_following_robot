@@ -1,12 +1,13 @@
 import bbio as io
 
 class IR_sensor:
-    def __init__(self, pins):
-        self.__pins = pins
+    def __init__(self, spi):
+        self.__spi = spi 
+        self.__spi.begin()
+        self.__spi.setBitsPerWord(0, 10)
+        self.__spi.setMaxFrequency(0, 2000000)
+        self.__spi.setClockMode(0, 0)
 
     def get_values(self):
-        values = []
-        for pin in self.__pins:
-            values.append(io.analogRead(pin))
-        return values
+        return self.__spi.read(0, 8)
         

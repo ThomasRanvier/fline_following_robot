@@ -8,7 +8,7 @@ MOTOR_1 = io.PWM2A
 MOTOR_2 = io.PWM2B
 ENCODER_1 = RotaryEncoder.EQEP1
 ENCODER_2 = RotaryEncoder.EQEP2b
-IR_SENSOR_PINS = [io.AIN0, io.AIN1, io.AIN2, io.AIN3]
+IR_SENSOR_SPI = io.SPI0
 LIMITS = (0, 255)
 PAUSE_MS = 10
 PAUSE_S = PAUSE_MS / 1000.0
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     pid_2.set_limits(LIMITS)
     encoder_1 = Encoder(ENCODER_1, FREQ)
     encoder_2 = Encoder(ENCODER_2, FREQ)
-    ir_sensors = IR_sensor(IR_SENSOR_PINS)
+    ir_sensors = IR_sensor(IR_SENSOR_SPI)
     while True:
         encoder_1_output = encoder_1.get_output(PAUSE_S)
         encoder_2_output = encoder_2.get_output(PAUSE_S)
@@ -37,6 +37,6 @@ if __name__ == '__main__':
         io.analogWrite(MOTOR_1, pi_1_value)
         io.analogWrite(MOTOR_2, pi_2_value)
         ir_values = ir_sensors.get_values()
-        print '(', ir_values[0], ir_values[1], ir_values[2], ir_values[3], ')'#, ir_values[4], ir_values[5], ir_values[6], ir_values[7], ')'
+        print '(', ir_values[0], ir_values[1], ir_values[2], ir_values[3], ir_values[4], ir_values[5], ir_values[6], ir_values[7], ')'
         io.delay(PAUSE_MS)
 

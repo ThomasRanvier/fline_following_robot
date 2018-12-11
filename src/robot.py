@@ -25,19 +25,29 @@ class Robot:
         #print '({0:3.2f}, {1:3.2f}, {2}, {3})'.format(right_speed, left_speed, right_encoder_output, left_encoder_output)
         return (right_speed, left_speed)
 
+    def __compute_ir_weight(self, ir_activations):
+        return sum([ir_activations[i] * cst.IR_SENSOR_WEIGHTS[i] for i in range(len(cst.IR_SENSOR_WEIGHTS))])
+
     def __analise_ir(self):
-        ir_values = self.__ir_sensors.get_values()
-        print '(', ir_values[0], ir_values[1], ir_values[2], ir_values[3], ir_values[4], ir_values[5], ir_values[6], ir_values[7], ')'
-        if ir_values[3] > 400 and ir_values[4] > 400:
-            self.__set_wanted_speeds(cst.MAX_SPEED, cst.MAX_SPEED)
-        elif ir_values[2] > 400:
-            self.__set_wanted_speeds(int(0.8 * cst.MAX_SPEED), cst.MAX_SPEED)
-        elif ir_values[5] > 400:
-            self.__set_wanted_speeds(cst.MAX_SPEED, int(0.8 * cst.MAX_SPEED))
-        elif ir_values[1] > 400:
-            self.__set_wanted_speeds(int(0.6 * cst.MAX_SPEED), cst.MAX_SPEED)
-        elif ir_values[6] > 400:
-            self.__set_wanted_speeds(cst.MAX_SPEED, int(0.6 * cst.MAX_SPEED))
+        ir_activations = self.__ir_sensors.get_activations()
+        ir_weight = self.__compute_ir_weight(ir_activations['current'])
+        print ir_activations['current']
+        print ir_weight['current']
+
+        if ir_activations['current'] == cst.IR_SENSOR_NO_ACTIVATIONS:
+            slowed_speed = cst.MAX_SPEED - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * cst.MAX_SPEED)
+            if ir_activations['last'][0] == 1:
+                self.__set_wanted_speeds(cst.MAX_SPEED, slowed_speed)
+            elif ir_activations['last'][7] == 1:
+                self.__set_wanted_speeds(slowed_speed, cst.MAX_SPEED)
+            else:
+                self.__set_wanted_speeds(cst.MAX_SPEED, cst.MAX_SPEED)
+        else:
+            slowed_speed = cst.MAX_SPEED - (abs(ir_weight) * cst.SCALE_SPEED * cst.MAX_SPEED)
+            if ir_weight >= 0:
+                self.__set_wanted_speeds(slowed_speed, cst.MAX_SPEED)
+            else:
+                self.__set_wanted_speeds(cst.MAX_SPEED, slowed_speed)
 
     def start(self):
         self.__set_speeds(cst.MAX_SPEED, cst.MAX_SPEED)

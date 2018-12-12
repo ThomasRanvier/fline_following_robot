@@ -18,9 +18,9 @@ class Robot:
         self.__left_wheel['pi_controller'].set_point(left_speed)
 
     def __get_corrected_speeds(self):
-        right_encoder_output = self.__right_wheel['encoder'].get_output(cst.PAUSE_S)
+        right_encoder_output = abs(self.__right_wheel['encoder'].get_output(cst.PAUSE_S))
         right_speed = self.__right_wheel['pi_controller'].update(right_encoder_output)
-        left_encoder_output = -self.__left_wheel['encoder'].get_output(cst.PAUSE_S)
+        left_encoder_output = abs(self.__left_wheel['encoder'].get_output(cst.PAUSE_S))
         left_speed = self.__left_wheel['pi_controller'].update(left_encoder_output)
         print '({0:3.2f}, {1:3.2f}, {2}, {3})'.format(left_speed, right_speed, left_encoder_output, right_encoder_output)
         return (right_speed, left_speed)

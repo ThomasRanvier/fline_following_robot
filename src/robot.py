@@ -26,13 +26,33 @@ class Robot:
         return (right_speed, left_speed)
 
     def __compute_ir_weight(self, ir_activations):
-        return sum([ir_activations[i] * cst.IR_SENSOR_WEIGHTS[i] for i in range(len(cst.IR_SENSOR_WEIGHTS))])
+        weight = 0
+
+        if ir_activations[0] == 1:
+            weight += cst.IR_SENSOR_WEIGHTS[0]
+        elif ir_activations[1] == 1: 
+            weight += cst.IR_SENSOR_WEIGHTS[1]
+        elif ir_activations[2] == 1: 
+            weight += cst.IR_SENSOR_WEIGHTS[2]
+        elif ir_activations[3] == 1: 
+            weight += cst.IR_SENSOR_WEIGHTS[3]
+
+        if ir_activations[7] == 1:
+            weight += cst.IR_SENSOR_WEIGHTS[7]
+        elif ir_activations[6] == 1: 
+            weight += cst.IR_SENSOR_WEIGHTS[6]
+        elif ir_activations[5] == 1: 
+            weight += cst.IR_SENSOR_WEIGHTS[5]
+        elif ir_activations[4] == 1: 
+            weight += cst.IR_SENSOR_WEIGHTS[4]
+
+        return weight
 
     def __analise_ir(self):
         ir_activations = self.__ir_sensors.get_activations()
         ir_weight = self.__compute_ir_weight(ir_activations['current'])
         print ir_activations['current']
-        print ir_weight['current']
+        print ir_weight
 
         if ir_activations['current'] == cst.IR_SENSOR_NO_ACTIVATIONS:
             slowed_speed = cst.MAX_SPEED - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * cst.MAX_SPEED)

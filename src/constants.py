@@ -2,10 +2,10 @@ import bbio as io
 from bbio.libraries.RotaryEncoder import RotaryEncoder
 
 MAX_SPEED = 80
-RIGHT_MOTOR = io.PWM2A
-LEFT_MOTOR = io.PWM2B
-RIGHT_ENCODER = RotaryEncoder.EQEP1
-LEFT_ENCODER = RotaryEncoder.EQEP2b
+RIGHT_MOTOR = io.PWM2B
+LEFT_MOTOR = io.PWM2A
+RIGHT_ENCODER = RotaryEncoder.EQEP2b
+LEFT_ENCODER = RotaryEncoder.EQEP1
 IR_SENSOR_SPI = io.SPI0
 IR_SENSOR_CS = 0
 IR_SENSOR_FREQ = 50000

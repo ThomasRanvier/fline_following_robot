@@ -20,9 +20,9 @@ class Robot:
     def __get_corrected_speeds(self):
         right_encoder_output = self.__right_wheel['encoder'].get_output(cst.PAUSE_S)
         right_speed = self.__right_wheel['pi_controller'].update(right_encoder_output)
-        left_encoder_output = self.__left_wheel['encoder'].get_output(cst.PAUSE_S)
+        left_encoder_output = -self.__left_wheel['encoder'].get_output(cst.PAUSE_S)
         left_speed = self.__left_wheel['pi_controller'].update(left_encoder_output)
-        #print '({0:3.2f}, {1:3.2f}, {2}, {3})'.format(right_speed, left_speed, right_encoder_output, left_encoder_output)
+        print '({0:3.2f}, {1:3.2f}, {2}, {3})'.format(left_speed, right_speed, left_encoder_output, right_encoder_output)
         return (right_speed, left_speed)
 
     def __compute_ir_weight(self, ir_activations):
@@ -51,9 +51,6 @@ class Robot:
     def __analise_ir(self):
         ir_activations = self.__ir_sensors.get_activations()
         ir_weight = self.__compute_ir_weight(ir_activations['current'])
-        print ir_activations['current']
-        print ir_weight
-
         if ir_activations['current'] == cst.IR_SENSOR_NO_ACTIVATIONS:
             slowed_speed = cst.MAX_SPEED - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * cst.MAX_SPEED)
             if ir_activations['last'][0] == 1:
@@ -70,7 +67,6 @@ class Robot:
                 self.__set_wanted_speeds(cst.MAX_SPEED, slowed_speed)
 
     def start(self):
-        self.__set_speeds(cst.MAX_SPEED, cst.MAX_SPEED)
         self.__set_wanted_speeds(cst.MAX_SPEED, cst.MAX_SPEED)
         while True:
             self.__analise_ir()

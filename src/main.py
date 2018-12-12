@@ -4,16 +4,21 @@ from ir_sensor import IR_sensor
 from robot import Robot
 import constants as cst
 
+"""
+File containing the main function, here are created the instances used to make the 
+robot follow the line.
+"""
+
 if __name__ == '__main__':
-    right_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S, cst.PI_GAIN)
-    right_encoder = Encoder(cst.RIGHT_ENCODER, cst.ENCODER_FREQ)
+    right_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S)
+    right_encoder = Encoder(cst.RIGHT_ENCODER, cst.ENCODER_FREQ, cst.ENCODER_OUTPUT_GAIN)
     right_wheel = {}
     right_wheel['motor'] = cst.RIGHT_MOTOR
     right_wheel['pi_controller'] = right_pid
     right_wheel['encoder'] = right_encoder
 
-    left_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S, cst.PI_GAIN)
-    left_encoder = Encoder(cst.LEFT_ENCODER, cst.ENCODER_FREQ)
+    left_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S)
+    left_encoder = Encoder(cst.LEFT_ENCODER, cst.ENCODER_FREQ, cst.ENCODER_OUTPUT_GAIN)
     left_wheel = {}
     left_wheel['motor'] = cst.LEFT_MOTOR
     left_wheel['pi_controller'] = left_pid

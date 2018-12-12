@@ -1,6 +1,10 @@
 import bbio as io
 from bbio.libraries.RotaryEncoder import RotaryEncoder
 
+"""
+File containing all useful constants that are used in the code
+"""
+
 MAX_SPEED = 80
 RIGHT_MOTOR = io.PWM2B
 LEFT_MOTOR = io.PWM2A
@@ -21,4 +25,4 @@ PAUSE_S = PAUSE_MS / 1000.0
 ENCODER_FREQ = 100
 KP = 1.00726
 KI = 18.38404
-PI_GAIN = 255.0 / 8000.0
+ENCODER_OUTPUT_GAIN = 255.0 / 8000.0

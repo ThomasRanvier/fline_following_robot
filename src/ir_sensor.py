@@ -19,7 +19,7 @@ class IR_sensor:
         self.__spi = spi 
         self.__spi.begin()
         self.__spi.setMaxFrequency(self.__cs, freq)
-        self.__last_activations = cst.IR_SENSOR_DEFAULT_ACTIVATIONS
+        self.__previous_activations = cst.IR_SENSOR_DEFAULT_ACTIVATIONS
 
     def get_activations(self):
         """
@@ -28,13 +28,13 @@ class IR_sensor:
         order to get back to the line.
         :returns: A dictionary with two entries: 
             'current' is a list of 8 digital values, 1 if the corresponding sensor is above the threshold defined in constants, 0 otherwise.
-            'previous' is a list of 8 digital values, it contains the last activations values.
+            'previous' is a list of 8 digital values, it contains the previous activations values.
         :rtype: dictionary
         """
         current_activations = [1 if self.__adc_read(sensor) >= cst.IR_SENSOR_THRESHOLD else 0 for sensor in range(8)] 
-        activations = {'current': current_activations, 'previous': self.__last_activations}
+        activations = {'current': current_activations, 'previous': self.__previous_activations}
         if current_activations != cst.IR_SENSOR_NO_ACTIVATIONS:
-            self.__last_activations = current_activations
+            self.__previous_activations = current_activations
         return activations
         
     def __adc_read(self, sensor):

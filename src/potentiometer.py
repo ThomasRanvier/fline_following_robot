@@ -22,6 +22,7 @@ class Potentiometer:
     def get_speed(self):
         """
         Gives the output of the potentiometer scaled between 0 and the maximal speed defined in the constants file.
+        Uses the Through_hole_display to display the speed.
         :returns: The speed that the user wants.
         :rtype: float
         """

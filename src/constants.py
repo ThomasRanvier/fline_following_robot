@@ -8,7 +8,7 @@ File containing all useful constants that are used in the code
 STATUS_LED = io.GPIO1_7
 START_LED = io.GPIO1_6
 TOGGLE_BUTTON = io.GPIO1_2
-MAX_SPEED = 50
+MAX_SPEED = 100
 RIGHT_MOTOR = io.PWM2B
 LEFT_MOTOR = io.PWM2A
 RIGHT_ENCODER = RotaryEncoder.EQEP2b

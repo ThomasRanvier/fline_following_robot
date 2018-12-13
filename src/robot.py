@@ -116,6 +116,9 @@ class Robot:
         """
         Starts the process to follow the line.
         """
+        self.__set_wanted_speeds(0, 0)
+        io.delay(2000)
+        io.toggle(cst.START_LED)
         switch = False
         while True:
             if io.digitalRead(cst.TOGGLE_BUTTON) == io.HIGH:

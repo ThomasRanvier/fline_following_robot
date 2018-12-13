@@ -75,31 +75,52 @@ class Robot:
         left_speed = self.__left_wheel['pi_controller'].update(left_encoder_output)
         return (right_speed, left_speed)
 
+    def __there_is_a_gap(self, ir_activations):
+        """
+        That function tells if there is a gap in the IR sensors detection, which can happen if there is a false line next 
+        to the real line, the false line being here to try to confuse the robot.
+        :param ir_activations: The digital activations list of the IR sensors.
+        :type ir_activations: list of 8 digital values
+        :returns: True if there is a gap, False otherwise.
+        :rtype: boolean
+        """
+        already_found_activation = False
+        for sensor in range(8):
+            if ir_activations[sensor] == 1:
+                if already_found_activation and sensor > 0 and ir_activations[sensor - 1] == 0:
+                    return True
+                already_found_activation = True
+        return False
+
+
     def __compute_ir_weight(self, ir_activations):
         """
-        That function gives a computed weight corresponding to the activations state of the IR sensors.
+        That function gives a smart computed weight corresponding to the activations state of the IR sensors.
         :param ir_activations: The digital activations list of the IR sensors.
         :type ir_activations: list of 8 digital values
         :returns: The computed weight.
         :rtype: integer
         """
+        ir_weights = cst.IR_SENSOR_WEIGHTS
+        if self.__there_is_a_gap(ir_activations):
+            ir_weights = ir_weights[::-1]
         weight = 0
         if ir_activations[0] == 1:
-            weight += cst.IR_SENSOR_WEIGHTS[0]
+            weight += ir_weights[0]
         elif ir_activations[1] == 1: 
-            weight += cst.IR_SENSOR_WEIGHTS[1]
+            weight += ir_weights[1]
         elif ir_activations[2] == 1: 
-            weight += cst.IR_SENSOR_WEIGHTS[2]
+            weight += ir_weights[2]
         elif ir_activations[3] == 1: 
-            weight += cst.IR_SENSOR_WEIGHTS[3]
+            weight += ir_weights[3]
         if ir_activations[7] == 1:
-            weight += cst.IR_SENSOR_WEIGHTS[7]
+            weight += ir_weights[7]
         elif ir_activations[6] == 1: 
-            weight += cst.IR_SENSOR_WEIGHTS[6]
+            weight += ir_weights[6]
         elif ir_activations[5] == 1: 
-            weight += cst.IR_SENSOR_WEIGHTS[5]
+            weight += ir_weights[5]
         elif ir_activations[4] == 1: 
-            weight += cst.IR_SENSOR_WEIGHTS[4]
+            weight += ir_weights[4]
         return weight
 
     def __analyse_ir(self):

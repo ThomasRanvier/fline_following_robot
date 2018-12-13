@@ -123,6 +123,13 @@ class Robot:
         return weight
 
     def __compute_general_speed(self, ir_activations):
+        """
+        Gives the speed of the robot, slowed down by a scale depending on how much the robot will have to turn.
+        :param ir_activations: The digital activations list of the IR sensors.
+        :type ir_activations: list of 8 digital values
+        :returns: The slowed speed.
+        :rtype: float
+        """
         scale = cst.SLOWING_SCALE
         if ir_activations[0] == 1 or ir_activations[7] == 1:
             scale = 0.75 * cst.SLOWING_SCALE

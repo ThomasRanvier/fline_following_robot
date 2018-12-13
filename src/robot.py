@@ -95,7 +95,9 @@ class Robot:
         """
         ir_activations = self.__ir_sensors.get_activations()
         ir_weight = self.__compute_ir_weight(ir_activations['current'])
-        if ir_activations['current'] == cst.IR_SENSOR_NO_ACTIVATIONS:
+        if ir_activations['current'] == cst.IR_SENSOR_FULL_ACTIVATIONS:
+            self.__set_wanted_speeds(0, 0)
+        elif ir_activations['current'] == cst.IR_SENSOR_NO_ACTIVATIONS:
             slowed_speed = cst.MAX_SPEED - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * cst.MAX_SPEED)
             if ir_activations['previous'][0] == 1:
                 self.__set_wanted_speeds(cst.MAX_SPEED, slowed_speed)

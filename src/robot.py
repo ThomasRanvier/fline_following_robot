@@ -10,7 +10,7 @@ class Robot:
         """
         Instantiates a robot.
         :param right_wheel: A dictionary that corresponds to the right wheel of the robot, there are 3 entries:
-            'motor': The PyBBIO pin corresponding to the used motor for that wheel.
+            'motor': The Motor object corresponding to the used motor for that wheel.
             'encoder': The Encoder object corresponding the that wheel.
             'pi_controller': The PI_controller object corresponding to that wheel.
         :type right_wheel: dictionary
@@ -48,8 +48,8 @@ class Robot:
         :param left_speed: The speed between 0 and 255 to apply to the motor corresponding to the left wheel.
         :type left_speed: float
         """
-        io.analogWrite(self.__right_wheel['motor'], right_speed)
-        io.analogWrite(self.__left_wheel['motor'], left_speed)
+        self.__right_wheel['motor'].set_speed(right_speed)
+        self.__left_wheel['motor'].set_speed(left_speed)
 
     def __set_wanted_speeds(self, right_speed, left_speed):
         """

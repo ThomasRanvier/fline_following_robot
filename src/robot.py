@@ -92,7 +92,6 @@ class Robot:
                 already_found_activation = True
         return False
 
-
     def __compute_ir_weight(self, ir_activations):
         """
         That function gives a smart computed weight corresponding to the activations state of the IR sensors.
@@ -123,6 +122,18 @@ class Robot:
             weight += ir_weights[4]
         return weight
 
+    def __compute_general_speed(self, ir_activations):
+        scale = cst.SLOWING_SCALE
+        if ir_activations[0] == 1 or ir_activations[7] == 1:
+            scale = 0.75 * cst.SLOWING_SCALE
+        elif ir_activations[1] == 1 or ir_activations[6] == 1:
+            scale = 0.5 * cst.SLOWING_SCALE
+        elif ir_activations[2] == 1 or ir_activations[5] == 1:
+            scale = 0.25 * cst.SLOWING_SCALE
+        elif ir_activations[3] == 1 or ir_activations[4] == 1:
+            scale = 0
+        return self.__speed * scale
+
     def __analyse_ir(self):
         """
         Function that analyses the informations from the IR sensors to determine the speeds that both wheels must follow.
@@ -130,22 +141,23 @@ class Robot:
         """
         ir_activations = self.__ir_sensors.get_activations()
         ir_weight = self.__compute_ir_weight(ir_activations['current'])
+        speed = self.__compute_general_speed(ir_activations['current'])
         if sum(ir_activations['current']) == 8:
             self.__set_wanted_speeds(0, 0)
         elif sum(ir_activations['current']) == 0:
-            slowed_speed = self.__speed - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * self.__speed)
+            slowed_speed = speed - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * speed)
             if ir_activations['previous'][0] == 1:
-                self.__set_wanted_speeds(self.__speed, slowed_speed)
+                self.__set_wanted_speeds(speed, slowed_speed)
             elif ir_activations['previous'][7] == 1:
-                self.__set_wanted_speeds(slowed_speed, self.__speed)
+                self.__set_wanted_speeds(slowed_speed, speed)
             else:
-                self.__set_wanted_speeds(self.__speed, self.__speed)
+                self.__set_wanted_speeds(speed, speed)
         else:
-            slowed_speed = self.__speed - (abs(ir_weight) * cst.SCALE_SPEED * self.__speed)
+            slowed_speed = speed - (abs(ir_weight) * cst.SCALE_SPEED * speed)
             if ir_weight >= 0:
-                self.__set_wanted_speeds(slowed_speed, self.__speed)
+                self.__set_wanted_speeds(slowed_speed, speed)
             else:
-                self.__set_wanted_speeds(self.__speed, slowed_speed)
+                self.__set_wanted_speeds(speed, slowed_speed)
 
     def start(self):
         """

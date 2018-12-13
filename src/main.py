@@ -1,18 +1,22 @@
 from pi_controller import PI_controller
 from encoder import Encoder
 from ir_sensor import IR_sensor
+from potentiometer import Potentiometer
 from robot import Robot
+from button import Button
+from through_hole_display import Through_hole_display
 import constants as cst
 import bbio as io
 
 """
-File containing the main function, here are created the instances used to make the 
+File containing the main function, here is the setup and the creation of all the instances used to make the 
 robot follow the line.
 """
 
 if __name__ == '__main__':
     io.pinMode(cst.STATUS_LED, io.OUTPUT)
     io.pinMode(cst.START_LED, io.OUTPUT)
+    io.pinMode(cst.TOGGLE_BUTTON, io.INPUT)
 
     right_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S)
     right_encoder = Encoder(cst.RIGHT_ENCODER, cst.ENCODER_FREQ, cst.ENCODER_OUTPUT_GAIN)
@@ -30,7 +34,11 @@ if __name__ == '__main__':
 
     ir_sensors = IR_sensor(cst.IR_SENSOR_SPI, cst.IR_SENSOR_CS, cst.IR_SENSOR_FREQ)
 
-    io.pinMode(cst.TOGGLE_BUTTON, io.INPUT)
+    led_display = Through_hole_display()
+    potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
+    
+    start_stop_button = Button(cst.START_STOP_BUTTON)
 
-    robot = Robot(right_wheel, left_wheel, ir_sensors)
+    #Par defaut vitesse du robot : max speed, donc par défaut sur l'écran on affichera la même
+    robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button)
     robot.start()

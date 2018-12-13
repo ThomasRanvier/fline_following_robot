@@ -6,10 +6,10 @@ class Robot:
     Class that implements the robot.
     """
 
-    def __init__(self, right_wheel, left_wheel, ir_sensors):
+    def __init__(self, right_wheel, left_wheel, ir_sensors, speed, potentiometer, start_stop_button):
         """
         Instantiates a robot.
-        :param right_wheel: A dictionary that corresponds to the right wheel of the robot, there are 3 entrie:
+        :param right_wheel: A dictionary that corresponds to the right wheel of the robot, there are 3 entries:
             'motor': The PyBBIO pin corresponding to the used motor for that wheel.
             'encoder': The Encoder object corresponding the that wheel.
             'pi_controller': The PI_controller object corresponding to that wheel.
@@ -18,13 +18,27 @@ class Robot:
         :type left_wheel: dictionary
         :param ir_sensors: The IR_sensor object used to access to the detected informations.
         :type ir_sensors: IR_sensor
+        :param speed: The speed that the robot tries to follow.
+        :type speed: float
+        :param potentiometer: The Potentiometer object that the user can use to change the speed that the robot must follow.
+        :type potentiometer: Potentiometer
+        :param start_stop_button: The Button object used for the start and stop button of the robot.
+        :type start_stop_button: Button
         """
         self.__right_wheel = right_wheel
         self.__right_wheel['pi_controller'].set_limits(cst.LIMITS)
         self.__left_wheel = left_wheel
         self.__left_wheel['pi_controller'].set_limits(cst.LIMITS)
         self.__ir_sensors = ir_sensors
+        self.__speed = speed
+        self.__potentiometer = potentiometer
+        self.__start_stop_button = start_stop_button
         self.__is_on = False
+        self.__set_wanted_speeds(0, 0)
+        for _ in range(40):
+            self.__get_corrected_speeds()
+            io.delay(PAUSE_MS)
+        io.toggle(cst.START_LED)
 
     def __set_speeds(self, right_speed, left_speed):
         """
@@ -95,43 +109,36 @@ class Robot:
         """
         ir_activations = self.__ir_sensors.get_activations()
         ir_weight = self.__compute_ir_weight(ir_activations['current'])
-        if ir_activations['current'] == cst.IR_SENSOR_FULL_ACTIVATIONS:
+        if sum(ir_activations['current']) == 8:
             self.__set_wanted_speeds(0, 0)
-        elif ir_activations['current'] == cst.IR_SENSOR_NO_ACTIVATIONS:
-            slowed_speed = cst.MAX_SPEED - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * cst.MAX_SPEED)
+        elif sum(ir_activations['current']) == 0:
+            slowed_speed = self.__speed - (cst.IR_SENSOR_MAX_WEIGHT * cst.SCALE_SPEED * self.__speed)
             if ir_activations['previous'][0] == 1:
-                self.__set_wanted_speeds(cst.MAX_SPEED, slowed_speed)
+                self.__set_wanted_speeds(self.__speed, slowed_speed)
             elif ir_activations['previous'][7] == 1:
-                self.__set_wanted_speeds(slowed_speed, cst.MAX_SPEED)
+                self.__set_wanted_speeds(slowed_speed, self.__speed)
             else:
-                self.__set_wanted_speeds(cst.MAX_SPEED, cst.MAX_SPEED)
+                self.__set_wanted_speeds(self.__speed, self.__speed)
         else:
-            slowed_speed = cst.MAX_SPEED - (abs(ir_weight) * cst.SCALE_SPEED * cst.MAX_SPEED)
+            slowed_speed = self.__speed - (abs(ir_weight) * cst.SCALE_SPEED * self.__speed)
             if ir_weight >= 0:
-                self.__set_wanted_speeds(slowed_speed, cst.MAX_SPEED)
+                self.__set_wanted_speeds(slowed_speed, self.__speed)
             else:
-                self.__set_wanted_speeds(cst.MAX_SPEED, slowed_speed)
+                self.__set_wanted_speeds(self.__speed, slowed_speed)
 
     def start(self):
         """
-        Starts the process to follow the line.
+        Starts the process to follow the line if the status is on, stops the wheels otherwise.
         """
-        self.__set_wanted_speeds(0, 0)
-        io.delay(2000)
-        io.toggle(cst.START_LED)
-        switch = False
         while True:
-            if io.digitalRead(cst.TOGGLE_BUTTON) == io.HIGH:
-                if not switch:
-                    switch = True
-                    self.__is_on = not self.__is_on
-                    io.toggle(cst.STATUS_LED)
-            else:
-                switch = False
+            if self.__start_stop_button.is_activated():
+                self.__is_on = not self.__is_on
+                io.toggle(cst.STATUS_LED)
             if self.__is_on:
                 self.__analyse_ir()
-                right_speed, left_speed = self.__get_corrected_speeds()
-                self.__set_speeds(right_speed, left_speed)
-                io.delay(cst.PAUSE_MS)
             else:
                 self.__set_wanted_speeds(0, 0)
+                self.__speed = self.__potentiometer.get_speed()
+            right_speed, left_speed = self.__get_corrected_speeds()
+            self.__set_speeds(right_speed, left_speed)
+            io.delay(cst.PAUSE_MS)

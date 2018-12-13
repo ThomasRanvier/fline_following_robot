@@ -1,14 +1,12 @@
 import bbio as io
 from bbio.libraries.RotaryEncoder import RotaryEncoder
 
-"""
-File containing all useful constants that are used in the code
-"""
-
 STATUS_LED = io.GPIO1_7
 START_LED = io.GPIO1_6
-TOGGLE_BUTTON = io.GPIO1_2
-MAX_SPEED = 100
+START_STOP_BUTTON = io.GPIO1_2
+MAX_SPEED = 180.0
+POTENTIOMETER = io.AIN4
+POTENTIOMETER_GAIN = MAX_SPEED / 1023.0
 RIGHT_MOTOR = io.PWM2B
 LEFT_MOTOR = io.PWM2A
 RIGHT_ENCODER = RotaryEncoder.EQEP2b
@@ -18,8 +16,6 @@ IR_SENSOR_CS = 0
 IR_SENSOR_FREQ = 50000
 IR_SENSOR_THRESHOLD = 300
 IR_SENSOR_DEFAULT_ACTIVATIONS = [0, 0, 0, 1, 1, 0, 0, 0]
-IR_SENSOR_NO_ACTIVATIONS = [0, 0, 0, 0, 0, 0, 0, 0]
-IR_SENSOR_FULL_ACTIVATIONS = [1, 1, 1, 1, 1, 1, 1, 1]
 IR_SENSOR_WEIGHTS = [-9, -6, -3, -1, 1, 3, 6, 9]
 IR_SENSOR_MAX_WEIGHT = 12
 SCALE_SPEED = 1.0 / 12.0

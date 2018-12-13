@@ -11,6 +11,10 @@ robot follow the line.
 """
 
 if __name__ == '__main__':
+    io.pinMode(cst.STATUS_LED, io.OUTPUT)
+    io.pinMode(cst.START_LED, io.OUTPUT)
+    io.toggle(cst.START_LED)
+
     right_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S)
     right_encoder = Encoder(cst.RIGHT_ENCODER, cst.ENCODER_FREQ, cst.ENCODER_OUTPUT_GAIN)
     right_wheel = {}

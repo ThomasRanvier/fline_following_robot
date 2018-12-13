@@ -118,12 +118,11 @@ class Robot:
         """
         switch = False
         while True:
-            print(io.digitalRead(cst.TOGGLE_BUTTON))
-            print(self.__is_on)
             if io.digitalRead(cst.TOGGLE_BUTTON) == io.HIGH:
                 if not switch:
                     switch = True
                     self.__is_on = not self.__is_on
+                    io.toggle(cst.STATUS_LED)
             else:
                 switch = False
             if self.__is_on:

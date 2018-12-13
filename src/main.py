@@ -3,6 +3,7 @@ from encoder import Encoder
 from ir_sensor import IR_sensor
 from robot import Robot
 import constants as cst
+import bbio as io
 
 """
 File containing the main function, here are created the instances used to make the 
@@ -25,6 +26,8 @@ if __name__ == '__main__':
     left_wheel['encoder'] = left_encoder
 
     ir_sensors = IR_sensor(cst.IR_SENSOR_SPI, cst.IR_SENSOR_CS, cst.IR_SENSOR_FREQ)
+
+    io.pinMode(cst.TOGGLE_BUTTON, io.INPUT)
 
     robot = Robot(right_wheel, left_wheel, ir_sensors)
     robot.start()

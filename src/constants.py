@@ -5,7 +5,8 @@ from bbio.libraries.RotaryEncoder import RotaryEncoder
 File containing all useful constants that are used in the code
 """
 
-MAX_SPEED = 80
+TOGGLE_BUTTON = io.GPIO1_2
+MAX_SPEED = 255
 RIGHT_MOTOR = io.PWM2B
 LEFT_MOTOR = io.PWM2A
 RIGHT_ENCODER = RotaryEncoder.EQEP2b

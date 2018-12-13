@@ -24,6 +24,7 @@ class Robot:
         self.__left_wheel = left_wheel
         self.__left_wheel['pi_controller'].set_limits(cst.LIMITS)
         self.__ir_sensors = ir_sensors
+        self.__is_on = False
 
     def __set_speeds(self, right_speed, left_speed):
         """
@@ -58,7 +59,6 @@ class Robot:
         right_speed = self.__right_wheel['pi_controller'].update(right_encoder_output)
         left_encoder_output = self.__left_wheel['encoder'].get_output(cst.PAUSE_S)
         left_speed = self.__left_wheel['pi_controller'].update(left_encoder_output)
-        print '({0:3.2f}, {1:3.2f}, {2:3.2f}, {3:3.2f})'.format(left_speed, right_speed, left_encoder_output, right_encoder_output)
         return (right_speed, left_speed)
 
     def __compute_ir_weight(self, ir_activations):
@@ -116,9 +116,20 @@ class Robot:
         """
         Starts the process to follow the line.
         """
-        self.__set_wanted_speeds(cst.MAX_SPEED, cst.MAX_SPEED)
+        switch = False
         while True:
-            self.__analyse_ir()
-            right_speed, left_speed = self.__get_corrected_speeds()
-            self.__set_speeds(right_speed, left_speed)
-            io.delay(cst.PAUSE_MS)
+            print(io.digitalRead(cst.TOGGLE_BUTTON))
+            print(self.__is_on)
+            if io.digitalRead(cst.TOGGLE_BUTTON) == io.HIGH:
+                if not switch:
+                    switch = True
+                    self.__is_on = not self.__is_on
+            else:
+                switch = False
+            if self.__is_on:
+                self.__analyse_ir()
+                right_speed, left_speed = self.__get_corrected_speeds()
+                self.__set_speeds(right_speed, left_speed)
+                io.delay(cst.PAUSE_MS)
+            else:
+                self.__set_wanted_speeds(0, 0)

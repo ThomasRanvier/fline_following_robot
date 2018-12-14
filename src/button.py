@@ -1,3 +1,5 @@
+import bbio as io
+
 class Button:
     """
     Class that implements a button.

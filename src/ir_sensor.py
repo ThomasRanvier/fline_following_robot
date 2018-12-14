@@ -33,7 +33,7 @@ class IR_sensor:
         """
         current_activations = [1 if self.__adc_read(sensor) >= cst.IR_SENSOR_THRESHOLD else 0 for sensor in range(8)] 
         activations = {'current': current_activations, 'previous': self.__previous_activations}
-        if current_activations != cst.IR_SENSOR_NO_ACTIVATIONS:
+        if sum(current_activations) != 0:
             self.__previous_activations = current_activations
         return activations
         

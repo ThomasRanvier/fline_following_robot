@@ -17,7 +17,7 @@ robot follow the line.
 if __name__ == '__main__':
     io.pinMode(cst.STATUS_LED, io.OUTPUT)
     io.pinMode(cst.START_LED, io.OUTPUT)
-    io.pinMode(cst.TOGGLE_BUTTON, io.INPUT)
+    io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
 
     right_motor = Motor(cst.RIGHT_MOTOR)
     right_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S)
@@ -42,6 +42,5 @@ if __name__ == '__main__':
     
     start_stop_button = Button(cst.START_STOP_BUTTON)
 
-    #Par defaut vitesse du robot : max speed, donc par défaut sur l'écran on affichera la même
     robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button)
     robot.start()

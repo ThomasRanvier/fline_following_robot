@@ -103,7 +103,10 @@ class Robot:
         """
         ir_weights = cst.IR_SENSOR_WEIGHTS
         if self.__there_is_a_gap(ir_activations):
+            #print 'There is a gap'
             ir_weights = ir_weights[::-1]
+        #else:
+            #print 'There is no gap'
         weight = 0
         if ir_activations[0] == 1:
             weight += ir_weights[0]
@@ -188,7 +191,7 @@ class Robot:
                 self.__analyse_ir()
             else:
                 self.__set_wanted_speeds(0, 0)
-                #self.__speed = self.__potentiometer.get_speed()
+                self.__speed = self.__potentiometer.get_speed()
             right_speed, left_speed = self.__get_corrected_speeds()
             self.__set_speeds(right_speed, left_speed)
             io.delay(cst.PAUSE_MS)

@@ -27,5 +27,5 @@ class Potentiometer:
         :rtype: float
         """
         speed = io.analogRead(self.__pin) * self.__gain
-        self.__led_display.display(int(round(speed)))
+        #self.__led_display.display(int(round(speed)))
         return speed

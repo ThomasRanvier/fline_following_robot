@@ -1,5 +1,6 @@
 import bbio as io
 import constants as cst
+import math
 
 class Robot:
     """
@@ -125,20 +126,29 @@ class Robot:
     def __compute_general_speed(self, ir_activations):
         """
         Gives the speed of the robot, slowed down by a scale depending on how much the robot will have to turn.
+        The scale is computed from the threshold value defined in the constants, then the other points of the scale are the points
+        between the scale and 1, placed on a logarithmic function, using the following method:
+            y = a * ln(b * x)
+            a = (y1 - y2) / (x1 / x2)
+            b = exp((y2 * ln(x1) - y1 * ln(x2)) / (y1 - y2))
         :param ir_activations: The digital activations list of the IR sensors.
         :type ir_activations: list of 8 digital values
         :returns: The slowed speed.
         :rtype: float
         """
-        scale = cst.SLOWING_SCALE[4]
-        if ir_activations[0] == 1 or ir_activations[7] == 1:
-            scale = cst.SLOWING_SCALE[3]
-        elif ir_activations[1] == 1 or ir_activations[6] == 1:
-            scale = cst.SLOWING_SCALE[2]
-        elif ir_activations[2] == 1 or ir_activations[5] == 1:
-            scale = cst.SLOWING_SCALE[1]
-        elif ir_activations[3] == 1 or ir_activations[4] == 1:
-            scale = cst.SLOWING_SCALE[0]
+        scale = 1
+        if self.__speed >= cst.SLOWING_THRESHOLD:
+            scale = cst.SLOWING_THRESHOLD / self.__speed
+            a = (scale - 1) / math.log(1 / 5)
+            b = math.exp(-scale * math.log(5) / (scale - 1))
+            if ir_activations[0] == 1 or ir_activations[7] == 1:
+                scale = a * math.log(b * 2)
+            elif ir_activations[1] == 1 or ir_activations[6] == 1:
+                scale = a * math.log(b * 3)
+            elif ir_activations[2] == 1 or ir_activations[5] == 1:
+                scale = a * math.log(b * 4)
+            elif ir_activations[3] == 1 or ir_activations[4] == 1:
+                scale = 1.0
         return self.__speed * scale
 
     def __analyse_ir(self):

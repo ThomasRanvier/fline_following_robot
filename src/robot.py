@@ -130,15 +130,15 @@ class Robot:
         :returns: The slowed speed.
         :rtype: float
         """
-        scale = cst.SLOWING_SCALE
+        scale = cst.SLOWING_SCALE[4]
         if ir_activations[0] == 1 or ir_activations[7] == 1:
-            scale = 0.75 * cst.SLOWING_SCALE
+            scale = cst.SLOWING_SCALE[3]
         elif ir_activations[1] == 1 or ir_activations[6] == 1:
-            scale = 0.5 * cst.SLOWING_SCALE
+            scale = cst.SLOWING_SCALE[2]
         elif ir_activations[2] == 1 or ir_activations[5] == 1:
-            scale = 0.25 * cst.SLOWING_SCALE
+            scale = cst.SLOWING_SCALE[1]
         elif ir_activations[3] == 1 or ir_activations[4] == 1:
-            scale = 0
+            scale = cst.SLOWING_SCALE[0]
         return self.__speed * scale
 
     def __analyse_ir(self):

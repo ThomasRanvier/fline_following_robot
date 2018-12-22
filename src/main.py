@@ -37,8 +37,8 @@ if __name__ == '__main__':
 
     ir_sensors = IR_sensor(cst.IR_SENSOR_SPI, cst.IR_SENSOR_CS, cst.IR_SENSOR_FREQ)
 
-    led_display = Through_hole_display()
-    potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
+    led_display = None#Through_hole_display()
+    potentiometer = None#Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
     
     start_stop_button = Button(cst.START_STOP_BUTTON)
 

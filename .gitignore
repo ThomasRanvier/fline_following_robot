@@ -19,3 +19,8 @@ gen
 .vim/
 .viminfo
 .env
+*.aux
+*.loa
+*.log
+*.out
+*.toc

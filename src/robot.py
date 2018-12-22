@@ -191,7 +191,7 @@ class Robot:
                 self.__analyse_ir()
             else:
                 self.__set_wanted_speeds(0, 0)
-                self.__speed = self.__potentiometer.get_speed()
+                #self.__speed = self.__potentiometer.get_speed()
             right_speed, left_speed = self.__get_corrected_speeds()
             self.__set_speeds(right_speed, left_speed)
             io.delay(cst.PAUSE_MS)

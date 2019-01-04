@@ -140,6 +140,7 @@ class Robot:
         :rtype: float
         """
         scale = 1.0
+        """
         if self.__speed >= cst.SLOWING_THRESHOLD:
             scale = cst.SLOWING_THRESHOLD / self.__speed
             a = (scale - 1.0) / math.log(1.0 / 5.0)
@@ -152,6 +153,7 @@ class Robot:
                 scale = a * math.log(b * 4.0)
             elif ir_activations[3] == 1 or ir_activations[4] == 1:
                 scale = 1.0
+        """
         return self.__speed * scale
 
     def __analyse_ir(self):
@@ -191,7 +193,7 @@ class Robot:
                 self.__analyse_ir()
             else:
                 self.__set_wanted_speeds(0, 0)
-                #self.__speed = self.__potentiometer.get_speed()
+                self.__speed = self.__potentiometer.get_speed()
             right_speed, left_speed = self.__get_corrected_speeds()
             self.__set_speeds(right_speed, left_speed)
             io.delay(cst.PAUSE_MS)

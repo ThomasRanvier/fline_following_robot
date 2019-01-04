@@ -10,8 +10,7 @@ import constants as cst
 import bbio as io
 
 """
-File containing the main function, here is the setup and the creation of all the instances used to make the 
-robot follow the line.
+File containing the main function, here is the setup and the creation of all the instances used to make the robot follow the line.
 """
 
 if __name__ == '__main__':
@@ -38,7 +37,7 @@ if __name__ == '__main__':
     ir_sensors = IR_sensor(cst.IR_SENSOR_SPI, cst.IR_SENSOR_CS, cst.IR_SENSOR_FREQ)
 
     led_display = None#Through_hole_display()
-    potentiometer = None#Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
+    potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
     
     start_stop_button = Button(cst.START_STOP_BUTTON)
 

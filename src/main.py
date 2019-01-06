@@ -8,15 +8,54 @@ from motor import Motor
 from through_hole_display import Through_hole_display
 import constants as cst
 import bbio as io
+import time
+from multiprocessing import Process
 
 """
 File containing the main function, here is the setup and the creation of all the instances used to make the robot follow the line.
 """
 
-if __name__ == '__main__':
-    io.pinMode(cst.STATUS_LED, io.OUTPUT)
-    io.pinMode(cst.START_LED, io.OUTPUT)
-    io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
+def initial_start():
+    """
+    Before launching the main function, shows that the script is ready.
+    """
+    def blink_leds():
+        """
+        Makes the leds blink to show that everything is on.
+        """
+        global leds_on
+        while True:
+            sleep(0.25)
+            io.toggle(cst.STATUS_LED)
+            io.toggle(cst.START_LED)
+            leds_on = not leds_on
+
+    leds_on = False
+    start_process = False
+    button = Button(cst.START_STOP_BUTTON)
+
+    print 'Start blinking'
+    blinking = Process(target=blink_leds)
+    blinking.start()
+
+    while not start_process:
+        if button.is_activated():
+            start_process = True
+
+    print 'Stop blinking'
+    blinking.terminate()
+
+    sleep(1)
+
+    if leds_on:
+        io.toggle(cst.STATUS_LED)
+        io.toggle(cst.START_LED)
+
+def main():
+    """
+    Main function
+    """
+    print 'Start main'
 
     right_motor = Motor(cst.RIGHT_MOTOR)
     right_pid = PI_controller(cst.KP, cst.KI, cst.PAUSE_S)
@@ -43,3 +82,11 @@ if __name__ == '__main__':
 
     robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button)
     robot.start()
+
+if __name__ == '__main__':
+    io.pinMode(cst.STATUS_LED, io.OUTPUT)
+    io.pinMode(cst.START_LED, io.OUTPUT)
+    io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
+
+    initial_start()
+    main()

@@ -186,10 +186,10 @@ class Robot:
         Starts the process to follow the line if the status is on, stops the wheels otherwise.
         """
         while True:
-            if self.__start_stop_button.is_activated():
+            if False:#self.__start_stop_button.is_activated():
                 self.__is_on = not self.__is_on
                 io.toggle(cst.STATUS_LED)
-            if self.__is_on:
+            if True:#self.__is_on:
                 self.__analyse_ir()
             else:
                 self.__set_wanted_speeds(0, 0)

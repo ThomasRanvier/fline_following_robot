@@ -78,7 +78,7 @@ def main():
     led_display = None#Through_hole_display()
     potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
     
-    start_stop_button = Button(cst.START_STOP_BUTTON)
+    start_stop_button = None#Button(cst.START_STOP_BUTTON)
 
     robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button)
     robot.start()
@@ -86,7 +86,7 @@ def main():
 if __name__ == '__main__':
     io.pinMode(cst.STATUS_LED, io.OUTPUT)
     io.pinMode(cst.START_LED, io.OUTPUT)
-    io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
+    #io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
 
-    initial_start()
+    #initial_start()
     main()

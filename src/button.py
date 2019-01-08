@@ -19,4 +19,4 @@ class Button:
         :returns: True if the button is activated, False otherwise.
         :rtype: boolean
         """
-        return io.digitalRead(self.__pin) == io.HIGH:
+        return io.digitalRead(self.__pin) == io.HIGH

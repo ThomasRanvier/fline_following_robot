@@ -43,7 +43,7 @@ def initial_start(start_stop_button):
     io.digitalWrite(cst.STATUS_LED, io.LOW)
     io.digitalWrite(cst.START_LED, io.LOW)
 
-    sleep(1)
+    time.sleep(1)
 
 def main(start_stop_button):
     """

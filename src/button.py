@@ -12,7 +12,6 @@ class Button:
         :type pin: PyBBIO constant
         """
         self.__pin = pin
-        self.__switch = False
 
     def is_activated(self):
         """
@@ -20,11 +19,4 @@ class Button:
         :returns: True if the button is activated, False otherwise.
         :rtype: boolean
         """
-        activated = False
-        if io.digitalRead(self.__pin) == io.HIGH:
-            if not self.__switch:
-                self.__switch = True
-                activated = True
-        else:
-            self.__switch = False
-        return activated
+        return io.digitalRead(self.__pin) == io.HIGH:

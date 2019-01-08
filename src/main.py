@@ -23,14 +23,11 @@ def initial_start():
         """
         Makes the leds blink to show that everything is on.
         """
-        global leds_on
         while True:
             sleep(0.25)
             io.toggle(cst.STATUS_LED)
             io.toggle(cst.START_LED)
-            leds_on = not leds_on
 
-    leds_on = False
     start_process = False
     button = Button(cst.START_STOP_BUTTON)
 
@@ -44,12 +41,10 @@ def initial_start():
 
     print 'Stop blinking'
     blinking.terminate()
+    io.digitalWrite(cst.STATUS_LED, io.LOW)
+    io.digitalWrite(cst.START_LED, io.LOW)
 
     sleep(1)
-
-    if leds_on:
-        io.toggle(cst.STATUS_LED)
-        io.toggle(cst.START_LED)
 
 def main():
     """

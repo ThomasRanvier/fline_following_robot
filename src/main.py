@@ -24,7 +24,7 @@ def initial_start(start_stop_button):
         Makes the leds blink to show that everything is on.
         """
         while True:
-            sleep(0.25)
+            time.sleep(0.25)
             io.toggle(cst.STATUS_LED)
             io.toggle(cst.START_LED)
 

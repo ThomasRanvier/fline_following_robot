@@ -15,7 +15,7 @@ from multiprocessing import Process
 File containing the main function, here is the setup and the creation of all the instances used to make the robot follow the line.
 """
 
-def initial_start():
+def initial_start(start_stop_button):
     """
     Before launching the main function, shows that the script is ready.
     """
@@ -29,14 +29,13 @@ def initial_start():
             io.toggle(cst.START_LED)
 
     start_process = False
-    button = Button(cst.START_STOP_BUTTON)
 
     print 'Start blinking'
     blinking = Process(target=blink_leds)
     blinking.start()
 
     while not start_process:
-        if button.is_activated():
+        if start_stop_button.is_activated():
             start_process = True
 
     print 'Stop blinking'
@@ -46,7 +45,7 @@ def initial_start():
 
     sleep(1)
 
-def main():
+def main(start_stop_button):
     """
     Main function
     """
@@ -70,18 +69,17 @@ def main():
 
     ir_sensors = IR_sensor(cst.IR_SENSOR_SPI, cst.IR_SENSOR_CS, cst.IR_SENSOR_FREQ)
 
-    led_display = None#Through_hole_display()
-    potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
-    
-    start_stop_button = None#Button(cst.START_STOP_BUTTON)
-
     robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button)
     robot.start()
 
 if __name__ == '__main__':
     io.pinMode(cst.STATUS_LED, io.OUTPUT)
     io.pinMode(cst.START_LED, io.OUTPUT)
-    #io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
+    io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
 
-    #initial_start()
-    main()
+    led_display = None#Through_hole_display()
+    potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
+    start_stop_button = Button(cst.START_STOP_BUTTON)
+
+    initial_start(start_stop_button)
+    main(start_stop_button)

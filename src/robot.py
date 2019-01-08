@@ -184,7 +184,7 @@ class Robot:
         Starts the process to follow the line if the status is on, stops the wheels otherwise.
         """
         while True:
-            if False:#self.__start_stop_button.is_activated():
+            if self.__start_stop_button.is_activated():
                 if not self.__switch_on:
                     self.__switch_on = True
                     self.__is_on = not self.__is_on
@@ -192,7 +192,7 @@ class Robot:
             else:
                 self.__switch_on = False
             self.__speed = self.__potentiometer.get_speed()
-            if True:#self.__is_on:
+            if self.__is_on:
                 self.__analyse_ir()
             else:
                 self.__set_wanted_speeds(0, 0)

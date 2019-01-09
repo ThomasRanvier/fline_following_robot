@@ -5,7 +5,7 @@ from potentiometer import Potentiometer
 from robot import Robot
 from button import Button
 from motor import Motor
-from through_hole_display import Through_hole_display
+from lcd_display import LCD_display
 import constants as cst
 import bbio as io
 import time
@@ -68,8 +68,9 @@ def main(start_stop_button):
     left_wheel['encoder'] = left_encoder
 
     ir_sensors = IR_sensor(cst.IR_SENSOR_SPI, cst.IR_SENSOR_CS, cst.IR_SENSOR_FREQ)
+    lcd_display = LCD_display(cst.LCD_BUS)
 
-    robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button)
+    robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button, lcd_display)
     robot.start()
 
 if __name__ == '__main__':
@@ -77,8 +78,7 @@ if __name__ == '__main__':
     io.pinMode(cst.START_LED, io.OUTPUT)
     io.pinMode(cst.START_STOP_BUTTON, io.INPUT)
 
-    led_display = None#Through_hole_display()
-    potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN, led_display)
+    potentiometer = Potentiometer(cst.POTENTIOMETER, cst.POTENTIOMETER_GAIN)
     start_stop_button = Button(cst.START_STOP_BUTTON)
 
     initial_start(start_stop_button)

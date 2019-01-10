@@ -106,22 +106,14 @@ class Robot:
         if self.__there_is_a_gap(ir_activations):
             ir_weights = ir_weights[::-1]
         weight = 0
-        if ir_activations[0] == 1:
-            weight += ir_weights[0]
-        elif ir_activations[1] == 1: 
-            weight += ir_weights[1]
-        elif ir_activations[2] == 1: 
-            weight += ir_weights[2]
-        elif ir_activations[3] == 1: 
-            weight += ir_weights[3]
-        if ir_activations[7] == 1:
-            weight += ir_weights[7]
-        elif ir_activations[6] == 1: 
-            weight += ir_weights[6]
-        elif ir_activations[5] == 1: 
-            weight += ir_weights[5]
-        elif ir_activations[4] == 1: 
-            weight += ir_weights[4]
+        for i in range(0, 4):
+            if ir_activations[i] == 1:
+                weight += ir_weights[i]
+                break
+        for i in range(7, 3, -1):
+            if ir_activations[i] == 1:
+                weight += ir_weights[i]
+                break
         return weight
 
     def __compute_general_speed(self, ir_activations):

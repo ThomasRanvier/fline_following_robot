@@ -110,24 +110,18 @@ This is the pseudocode of the function so it is easier to understand how it work
     \begin{algorithmic}[1]
         \Procedure{$\_\_compute\_ir\_weight$}{$activation$}
             \State $weight \gets 0$
-            \If{$activation[0] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[0]$
-            \ElsIf{$activation[1] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[1]$
-            \ElsIf{$activation[2] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[2]$
-            \ElsIf{$activation[3] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[3]$
-            \EndIf
-            \If{$activation[7] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[7]$
-            \ElsIf{$activation[6] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[6]$
-            \ElsIf{$activation[5] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[5]$
-            \ElsIf{$activation[4] == 1$}
-                \State $weight \gets weight + ir\_sensor\_weights[4]$
-            \EndIf
+            \For{$i\texttt{ }in\texttt{ }range(0, 4)$}
+                \If{$activation[i] == 1$}
+                    \State $weight \gets weight + ir\_sensor\_weights[i]$
+                    \State \textbf{break}
+                \EndIf
+            \EndFor
+            \For{$i\texttt{ }in\texttt{ }range(7, 3, -1)$}
+                \If{$activation[i] == 1$}
+                    \State $weight \gets weight + ir\_sensor\_weights[i]$
+                    \State \textbf{break}
+                \EndIf
+            \EndFor
             \State \textbf{return} $weight$
         \EndProcedure
     \end{algorithmic}
@@ -140,12 +134,35 @@ The speed of the opposite wheel is then computed in that way: $speed - (scale \c
 \section*{Results and improvements}
 
 Our robot is able to follow the line, go straight forward if the line suddenly stops and go in the right direction if it goes out of the line in a sharp turn.
+Under is a picture of the robot.
+
+\begin{figure}[h]
+    \centering\includegraphics[width=0.5\textwidth]{robot.jpg}
+\end{figure}
 
 \subsection*{The lines in parallel}
 
 In one of the two circuits there is a part of the road where there are three lines in parallel, if the robot is not exactly on the right line it will eventually detect one of the two others.
 In that case since we only consider the extreme values of our sensors the robot would sometimes suddenly turn into an other direction.
-To fix this issue I added a function that detects when the are more than one line detected.
-In that case the weights are swapped and it makes the robot turn in the other way.
+To fix this issue I added a function that detects when there are more than one line detected.
+In that case the negative weights become positive and conversely, this will make the robot turn in the other way.
 The result is that it will avoid going on the parasite lines.
 
+\subsection*{Various improvements}
+
+We added some functionalities that make it easier to use the robot when it is not connected to a computer.
+We added one green LED, one red LED, one button and one potentiometer.
+
+When the Beaglebone starts our programs is started as a daemon, when the program starts the two LEDs blink simultaneously until the button is pressed.
+
+Once the button has been pressed the main function is launched, it will create all the instances to control the robot and when everything is ready the green LED goes on, at that point the robot is in pause so nothing else will happen.
+
+When the green LED is on we can press once again the button, it will light on the red LED to signal the state of the robot and it will make the robot start reading the IR sensors datas and start following the line if there is one to follow.
+When we want to stop the robot we can press the button again, the red LED goes off.
+
+We also added a potentiometer, it makes the speed of the robot vary between 0 and 255.
+
+\subsection*{Possible improvements}
+
+There are a lot of possible improvements to do, we could have added ultra-sonic sensors to try and detect obstacles.
+We could also have added a screen to make it easier to use the robot by displaying interesting informations.

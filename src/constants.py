@@ -1,8 +1,6 @@
 import bbio as io
 from bbio.libraries.RotaryEncoder import RotaryEncoder
 
-LCD_BUS = io.I2C1
-LCD_ADR = 0xC6
 STATUS_LED = io.GPIO1_7
 START_LED = io.GPIO1_6
 START_STOP_BUTTON = io.GPIO1_2

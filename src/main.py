@@ -68,7 +68,7 @@ def main(start_stop_button):
     left_wheel['encoder'] = left_encoder
 
     ir_sensors = IR_sensor(cst.IR_SENSOR_SPI, cst.IR_SENSOR_CS, cst.IR_SENSOR_FREQ)
-    lcd_display = LCD_display(cst.LCD_BUS)
+    lcd_display = LCD_display(cst.LCD_BUS, cst.LCD_ADR)
 
     robot = Robot(right_wheel, left_wheel, ir_sensors, cst.MAX_SPEED, potentiometer, start_stop_button, lcd_display)
     robot.start()

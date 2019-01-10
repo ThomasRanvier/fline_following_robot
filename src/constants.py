@@ -1,7 +1,8 @@
 import bbio as io
 from bbio.libraries.RotaryEncoder import RotaryEncoder
 
-LCD_BUS = io.I2C2
+LCD_BUS = io.I2C1
+LCD_ADR = 0xC6
 STATUS_LED = io.GPIO1_7
 START_LED = io.GPIO1_6
 START_STOP_BUTTON = io.GPIO1_2
@@ -17,7 +18,7 @@ IR_SENSOR_CS = 0
 IR_SENSOR_FREQ = 50000
 IR_SENSOR_THRESHOLD = 300
 IR_SENSOR_DEFAULT_ACTIVATIONS = [0, 0, 0, 1, 1, 0, 0, 0]
-IR_SENSOR_WEIGHTS = [-9, -6, -3, -1, 1, 3, 6, 9]
+IR_SENSOR_WEIGHTS = [-9, -7, -5, -1, 1, 5, 7, 9]
 IR_SENSOR_MAX_WEIGHT = 12
 SCALE_SPEED = 1.0 / 12.0
 SLOWING_THRESHOLD = 70.0
